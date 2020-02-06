@@ -152,7 +152,7 @@ wire  [7:0] ioctl_index;
 wire [10:0] ps2_key;
 
 wire [15:0] joystick_0, joystick_1;
-wire [15:0] joy = |status[31:30] ? joydb15_1 : joystick_0 | status[31] ? joydb15_2 : joystick_1;
+wire [15:0] joy = |status[31:30] ? joydb15_1 : status[31] ? joydb15_1 | joydb15_2 : joystick_0 | joystick_1;
 
 wire [21:0] gamma_bus;
 
