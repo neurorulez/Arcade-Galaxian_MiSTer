@@ -153,8 +153,11 @@ wire  [7:0] ioctl_index;
 
 wire [10:0] ps2_key;
 
-wire [15:0] joystick_0, joystick_1;
-wire [15:0] joy = |status[31:30] ? {joydb15_1[9],joydb15_1[7],joydb15_1[8],joydb15_1[4:0]} : status[31] ? {joydb15_1[9],joydb15_1[7],joydb15_1[8],joydb15_1[4:0]} | {joydb15_2[9],joydb15_2[8],joydb15_2[7],joydb15_2[4:0]} : joystick_0 | joystick_1;
+wire [15:0] joystick_0_USB, joystick_1_USB;
+wire [15:0] joy = joystick_0 | joystick_1;
+
+wire [15:0] joystick_0 = |status[31:30] ? {joydb15_1[11],joydb15_1[9],joydb15_1[10],joydb15_1[4:0]} : joystick_0_USB;
+wire [15:0] joystick_1 =  status[31]    ? {joydb15_2[11],joydb15_2[10],joydb15_2[9],joydb15_2[4:0]} : status[30] ? joystick_0_USB : joystick_1_USB;
 
 wire [21:0] gamma_bus;
 
@@ -191,8 +194,8 @@ hps_io #(.STRLEN($size(CONF_STR)>>3)) hps_io
 	.ioctl_index(ioctl_index),
 
 	.joy_raw(joydb15_1[5:0]),
-	.joystick_0(joystick_0),
-	.joystick_1(joystick_1),
+	.joystick_0(joystick_0_USB),
+	.joystick_1(joystick_1_USB),
 	.ps2_key(ps2_key)
 );
 
